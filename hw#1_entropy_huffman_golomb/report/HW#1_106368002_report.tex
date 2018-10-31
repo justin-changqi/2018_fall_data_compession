@@ -10,6 +10,13 @@
     \usepackage[export]{adjustbox}
     \usepackage[most]{tcolorbox}
     \usepackage{xcolor}
+    \usepackage{multicol}
+    \usepackage{array}
+    \usepackage{wrapfig}
+    \usepackage{multirow}
+    \usepackage{tabu}
+    % For tree
+    \usepackage{tikz}
 % \renewcommand{\theenumi}{(\alph*)}
 
 \titlespacing*{\section}
@@ -42,6 +49,7 @@ $H(X)$ for the following three cases of probability mass function $p(i)=prob[X=i
           &=-(-0.5-0.5)  \\
           &=1 ~bits/symbol
     \end{align*}
+    \label{p:1-a}
   \item $P(i)=1/4, for~i = 1, 2, 3,and~p(4) = p(5) = 1/8$:
     \subsection*{Ans}
     \begin{align*}
@@ -50,6 +58,7 @@ $H(X)$ for the following three cases of probability mass function $p(i)=prob[X=i
           &=-(-1.5-0.75)  \\
           &=2.25 ~bits/symbol
     \end{align*}
+    \label{p:1-b}
   \item $P(i)=2^{-i}, for~i = 1, 2, 3, 4,and~p(5) =  1/16$:
     \subsection*{Ans}
     \begin{align*}
@@ -58,14 +67,169 @@ $H(X)$ for the following three cases of probability mass function $p(i)=prob[X=i
             +0.0625\times(-4)) \\
           &=1.875 ~bits/symbol
     \end{align*}
+    \label{p:1-c}
 \end{enumerate}
+\newpage
 \section*{Problem 2 Huffman Code}
 Design a Huffman code C for the source in Problem 1. (15\%)
 \begin{enumerate}[label=(\alph*)]
   \item Specify your codewords for individual pmf model in Problem 1.
   \subsection*{Ans}
+  \textbf{1.\ref{p:1-a}}
+  \begin{multicols}{2}
+    \begin{tikzpicture}[level distance=1.5cm,
+      level 1/.style={sibling distance=3.5cm},
+      level 2/.style={sibling distance=1cm}]
+      \tikzstyle{every node}=[circle,draw]
+      \node (Root) {1}
+      child {
+          node  {$0.5$} 
+          child { node[rectangle] {1}}
+          edge from parent node[left,draw=none] {0}
+      }
+      child {
+          node {$0.5$}
+          child { node[rectangle] {2} }
+          edge from parent node[right,draw=none] {1}
+      };
+      % \noindent
+      \end{tikzpicture} 
+      \columnbreak
+
+      \null \vfill
+      \begin{tabular}{ |c|c|c|c| } 
+        \hline
+        Alphabet & P  & Codeword \\
+        \hline
+        1 & 0.5 & 0 \\ 
+        2 & 0.5 & 1 \\  
+        \hline
+        \end{tabular}
+
+        \null \vfill
+  \end{multicols}
+
+  \textbf{1.\ref{p:1-b}}
+  \begin{multicols}{2}
+    \begin{tikzpicture}[level distance=1.5cm,
+      level 1/.style={sibling distance=2.5cm},
+      level 2/.style={sibling distance=2.5cm},
+      level 3/.style={sibling distance=2.5cm},
+      level 4/.style={sibling distance=1.5cm}]
+      \tikzstyle{every node}=[circle,draw]
+      \node (Root) {1}
+      child {
+          node {$0.25$} 
+          child { 
+            child {
+              child {
+                child {
+                  node[rectangle] {1}
+                }
+              }
+            }
+          }
+          edge from parent node[left,draw=none] {0}
+      }
+      child {
+          node {$0.75$}
+          child { node {$0.25$} 
+            child { 
+              child {
+                child {
+                  node[rectangle] {2}
+                }
+              }
+            }
+            edge from parent node[left,draw=none] {0}
+          }
+          child { node {$0.5$}
+            child { node {$0.25$}
+              child { 
+                child {
+                    node[rectangle] {3}
+                }
+              }
+              edge from parent node[left,draw=none] {0}
+            }
+            child { node {$0.25$}
+              child { node {$0.125$}
+                child {
+                  node[rectangle] {4}
+                }
+                edge from parent node[left,draw=none] {0}
+              }
+              child { node {$0.125$}
+                child {
+                  node[rectangle] {5}
+                }
+                edge from parent node[right,draw=none] {1}
+              }
+              edge from parent node[right,draw=none] {1}
+            }
+            edge from parent node[right,draw=none] {1}
+          }
+          edge from parent node[right,draw=none] {1}
+      };
+      % \noindent
+      \end{tikzpicture} 
+      \columnbreak
+        
+      \null \vfill
+      \begin{tabular}{ |c|c|l| } 
+        \hline
+        Alphabet & P & Codeword \\
+        \hline
+        1 & 0.25  & 0 \\ 
+        2 & 0.25  & 10 \\
+        3 & 0.25  & 1110 \\
+        4 & 0.125 & 11110 \\
+        5 & 0.125 & 11111 \\
+        \hline
+        \end{tabular}
+
+        \null \vfill
+  \end{multicols}
+
+  \textbf{1.\ref{p:1-c}}
+  \begin{multicols}{2}
+    \begin{tikzpicture}[level distance=1.5cm,
+      level 1/.style={sibling distance=3.5cm},
+      level 2/.style={sibling distance=1cm}]
+      \tikzstyle{every node}=[circle,draw]
+      \node (Root) {1}
+      child {
+          node  {$0.5$} 
+          child { node[rectangle] {1}}
+          edge from parent node[left,draw=none] {0}
+      }
+      child {
+          node {$0.5$}
+          child { node[rectangle] {2} }
+          edge from parent node[right,draw=none] {1}
+      };
+      % \noindent
+      \end{tikzpicture} 
+      \columnbreak
+
+      \null \vfill
+      \begin{tabular}{ |c|c|c|c| } 
+        \hline
+        Alphabet & P  & Codeword \\
+        \hline
+        1 & 0.5     & 0 \\ 
+        2 & 0.25    & 1 \\  
+        3 & 0.125   & 1 \\  
+        4 & 0.0625  & 1 \\  
+        5 & 0.0625  & 1 \\  
+        \hline
+        \end{tabular}
+
+        \null \vfill
+  \end{multicols}
   \item Compute the expected codeword length and compare with the entropy for your codes in (a).
   \subsection*{Ans}
+  
   \item Design a code with minimum codeword length variance for the pmf model in Problem 1.(b)
   \subsection*{Ans}
 \end{enumerate}
