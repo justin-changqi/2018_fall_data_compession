@@ -15,9 +15,22 @@ class Node
   Node *child_r;
   Node *child_l;
   Node(std::string letter, int cnt);
-  bool operator<(const  Node & other) //(1)
+  Node(int cnt, Node *child_l, Node *child_r);
+  bool operator<(const  Node & other) 
   {
       return cnt < other.cnt;
+  }
+  bool operator>=(const  Node & other) 
+  {
+      return cnt >= other.cnt;
+  }
+  bool operator==(const  Node & other) 
+  {
+      return cnt == other.cnt;
+  }
+  int operator+(const  Node & other)
+  {
+      return cnt + other.cnt;
   }
 };
 
@@ -30,4 +43,6 @@ class HuffmanCode {
   std::string getSymbol(char c);
   void initNodes(std::vector<char> alphabas, std::vector<int> counts);
   void buildTree();
+  void mergeNodesToList(std::vector<Node> &list, std::vector<Node> &nodes);
+  void printTree();
 };
