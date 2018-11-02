@@ -4,7 +4,6 @@ Node::Node(std::string letter, int cnt)
 {
   this->letter = letter;
   this->cnt = cnt;
-  this->parent = NULL;
   this->child_l = NULL;
   this->child_r = NULL;
 }
@@ -12,7 +11,7 @@ Node::Node(std::string letter, int cnt)
 Node::Node(int cnt, Node *child_l, Node *child_r)
 {
   this->cnt = cnt;
-  this->parent = NULL;
+  // this->parent = NULL;
   this->child_l = child_l;
   this->child_r = child_r;
 }
@@ -107,15 +106,16 @@ void HuffmanCode::initNodes(std::vector<char> alphabas, std::vector<int> counts)
 void HuffmanCode::buildTree()
 {
   std::sort(this->nodes.begin(), this->nodes.end());
-  for (std::vector<Node>::iterator it=this->nodes.begin(); it!=this->nodes.end(); ++it)
-      std::cout << ' ' << it->letter << ":" << it->cnt;
-    std::cout << '\n';
-  std::cout << "Start Tree" << std::endl;
-  do
+  // for (std::vector<Node>::iterator it=this->nodes.begin(); it!=this->nodes.end(); ++it)
+  //     std::cout << ' ' << it->letter << ":" << it->cnt;
+  //   std::cout << '\n';
+  // std::cout << "Start Tree" << std::endl;
+  int start_index = 0;
+  while(this->nodes.size()-1 > start_index)
   {
     int node_merge_cnt = 1;
-    Node node =  this->nodes[0];
-    for (int i = 1; i < this->nodes.size(); i++)
+    Node node =  this->nodes[start_index];
+    for (int i = start_index; i < this->nodes.size(); i++)
     {
       Node node_next =  this->nodes[i];
       if (node == node_next)
@@ -136,36 +136,32 @@ void HuffmanCode::buildTree()
       node_merge_cnt = (node_merge_cnt / 2) * 2;
     }
     std::vector<Node> merge_nodes;
-    for (int i = 0; i < node_merge_cnt; i++)
+    for (int i = start_index; i < start_index+node_merge_cnt; i++)
     {
-      merge_nodes.push_back(this->nodes[0]);
-      this->nodes.erase (this->nodes.begin());
+      merge_nodes.push_back(this->nodes[i]);
+      // this->nodes.erase (this->nodes.begin());
       // this->nodes.erase (this->nodes.begin()+i+1);
     } 
     // Merge Node then put into node list
-    this->mergeNodesToList(this->nodes, merge_nodes);
-    // for (std::vector<Node>::iterator it=this->nodes.begin(); it!=this->nodes.end(); ++it)
-    //   std::cout << ' ' << it->letter << ":" << it->cnt;
-    // std::cout << '\n';
-    //  for (int i = 0; i < merge_nodes.size(); i++)
+    this->mergeNodesToList(this->nodes, start_index, start_index+node_merge_cnt);
+    start_index += node_merge_cnt;
+    // for (int i = 0; i < this->nodes.size(); i++)
     // {
-    //     std::cout << ' ' << merge_nodes[i].letter << ":" << merge_nodes[i].cnt;
+    //     std::cout << ' ' << this->nodes[i].letter << ":" << this->nodes[i].cnt;
     // }
-    // std::cout << std::endl;
-    for (int i = 0; i < this->nodes.size(); i++)
-    {
-        std::cout << ' ' << this->nodes[i].letter << ":" << this->nodes[i].cnt;
-    }
-     std::cout << std::endl;
-  }while(this->nodes.size() != 1);
-  this->root = &this->nodes[0];
+    //  std::cout << std::endl;
+    // std::cout << start_index << std::endl;
+  }
+  this->root = &this->nodes.back();
+  // std::cout << this->nodes.size() << std::endl;
 }
 
-void HuffmanCode::mergeNodesToList(std::vector<Node> &list, std::vector<Node> &nodes)
+void HuffmanCode::mergeNodesToList(std::vector<Node> &list,
+                                   int start_indx, int end_indx) 
 {
-  for (int i = 0; i < nodes.size(); i = i + 2)
+  for (int i = start_indx; i < end_indx; i = i + 2)
   {
-    Node n(nodes[i]+nodes[i+1], &nodes[i], &nodes[i+1]); 
+    Node n(list[i]+list[i+1], &list[i], &list[i+1]); 
     if (list.size() > 1)
     {
       bool inserted = false;
@@ -191,15 +187,29 @@ void HuffmanCode::mergeNodesToList(std::vector<Node> &list, std::vector<Node> &n
   }
 }
 
-void HuffmanCode::printTree()
+void HuffmanCode::printTree(Node *root, int spaces)
 {
-  std::cout << root->cnt << std::endl;
+  if(root != NULL)
+  {
+    this->printTree(root->child_r, spaces + 5);
+    for(int i = 0; i < spaces; i++)
+      std::cout << ' ';
+    std::cout << "   " << root->cnt << std::endl;
+    this->printTree(root->child_l, spaces + 5);
+  }
+  else
+  {
+    return;
+  }
 }
 
 int main(int argc, char const *argv[])
 {
   // HuffmanCode huffman_code("../santaclaus.txt");
   HuffmanCode huffman_code("../test.txt");
-  huffman_code.printTree();
+  std::cout << std::endl << "=================== Huffman Tree ================" << std::endl;
+  // HuffmanCode huffman_code("./hw#1_entropy_huffman_golomb/test.txt");
+  huffman_code.printTree(huffman_code.root, 1);
+  std::cout << std::endl << "===================================" << std::endl;
   return 0;
 }

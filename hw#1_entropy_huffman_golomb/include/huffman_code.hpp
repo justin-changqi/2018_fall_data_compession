@@ -11,7 +11,6 @@ class Node
   public:
   std::string letter;
   int cnt;
-  Node *parent;
   Node *child_r;
   Node *child_l;
   Node(std::string letter, int cnt);
@@ -43,6 +42,6 @@ class HuffmanCode {
   std::string getSymbol(char c);
   void initNodes(std::vector<char> alphabas, std::vector<int> counts);
   void buildTree();
-  void mergeNodesToList(std::vector<Node> &list, std::vector<Node> &nodes);
-  void printTree();
+  void mergeNodesToList(std::vector<Node> &list, int start_indx, int end_indx);
+  void printTree(Node *root, int spaces);
 };
