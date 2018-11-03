@@ -6,16 +6,19 @@
 #include <sstream>
 #include <string>
 #include <numeric>
+#include <cstring>
 
 class Node
 {
   public:
   std::string letter;
+  char symbol;
   int cnt;
   Node *child_r;
   Node *child_l;
-  Node(std::string letter, int cnt);
+  Node(std::string letter, char symbol, int cnt);
   Node(int cnt, Node *child_l, Node *child_r);
+  bool isLeaf();
   bool operator<(const  Node & other) 
   {
       return cnt < other.cnt;
@@ -38,7 +41,7 @@ class HuffmanCode {
   public:
   std::vector<Node> nodes;
   Node *root;
-  std::vector< std::pair <std::string, std::string> > code_list; 
+  std::vector< std::pair <char, std::string> > code_list; 
   double total_letters;
   HuffmanCode(std::string file, std::string csv_file);
   void getPmfCdf(std::vector<Node> node_list, 
@@ -57,5 +60,7 @@ class HuffmanCode {
   void buildTree();
   void mergeNodesToList(std::vector<Node> &list, int start_indx, int end_indx);
   void printTree(Node *root, int spaces);
-  // void encodeData(Node *root, std::string );
+  void encodeData(Node *root, std::string code);
+  bool isLeaf(Node *root);
+  void printCodeWord();
 };
