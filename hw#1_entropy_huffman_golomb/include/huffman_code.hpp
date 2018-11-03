@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <numeric>
 
 class Node
 {
@@ -37,11 +38,24 @@ class HuffmanCode {
   public:
   std::vector<Node> nodes;
   Node *root;
-  HuffmanCode(std::string file);
-  void printTable(std::vector<char> alphabas, std::vector<int> counts);
+  std::vector< std::pair <std::string, std::string> > code_list; 
+  double total_letters;
+  HuffmanCode(std::string file, std::string csv_file);
+  void getPmfCdf(std::vector<Node> node_list, 
+                 std::vector<double> &pmf, 
+                 std::vector<double> &cdf);
+  double getEntropy(std::vector<double> &pmf);
+  void printTable(std::vector<Node> node_list,
+                  std::vector<double> &pmf, 
+                  std::vector<double> &cdf);
+  void writeToCsv(std::string file_path,
+                  std::vector<Node> node_list,
+                  std::vector<double> &pmf, 
+                  std::vector<double> &cdf);
   std::string getSymbol(char c);
   void initNodes(std::vector<char> alphabas, std::vector<int> counts);
   void buildTree();
   void mergeNodesToList(std::vector<Node> &list, int start_indx, int end_indx);
   void printTree(Node *root, int spaces);
+  // void encodeData(Node *root, std::string );
 };

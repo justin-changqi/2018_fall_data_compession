@@ -15,6 +15,7 @@
     \usepackage{wrapfig}
     \usepackage{multirow}
     \usepackage{tabu}
+    \usepackage{hyperref}
     % For tree
     \usepackage{tikz}
 % \renewcommand{\theenumi}{(\alph*)}
@@ -342,6 +343,27 @@ for \textbf{santaclaus.txt}, which is an ASCII file with only lower-cased Englis
 letters (i.e., $a\sim z$), space and CR (carriage return), totally 28 symbols. The 
 file can be found on the class web site. Compute the entropy. (14\%)
 \subsection*{Ans}
+The source code for this problem are available at 
+\url{https://github.com/justin-changqi/2018_fall_data_compression.git}. Please check README.md 
+to know how to execute the code.\\
+After I executed the program the entropy is 4.12 bits/symbol. Empirical distribution shows in 
+Figure~\ref{fig:empirical-distribution}
+\begin{figure}[h!]
+  \centering
+    % \includegraphics[width=0.45\textwidth]{{"../result_img/empirical_distribution"}.png}
+    \includegraphics[width=\textwidth]{{"../result_img/statistics"}.png}
+  \caption{Statistics result for \textbf{santaclaus.txt}}
+  \label{fig:statistic-result}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.8\textwidth]{{"../result_img/empirical_distribution"}.png}
+  \caption{Empirical distribution for \textbf{santaclaus.txt}}
+  \label{fig:empirical-distribution}
+\end{figure}
+
+\newpage
 \section*{Problem 4 Huffman Code Encode C++}
 Write a program that designs a Huffman code for the given distribution in Problem 3. (14%)
 \subsection*{Ans}
@@ -357,6 +379,8 @@ b: 00001 \\
 z: 11001 \\
 \textbf{Note}: Show the Huffman tree during your coding process.
 \subsection*{Ans}
+
+\newpage
 \section*{Problem 6 Golomb Encoding and Decoding.}
 \begin{enumerate}[label=(\alph*)]
   \item Find the Golomb code of n=21 when m=4.

@@ -16,7 +16,7 @@ Node::Node(int cnt, Node *child_l, Node *child_r)
   this->child_r = child_r;
 }
 
-HuffmanCode::HuffmanCode( std::string file ) 
+HuffmanCode::HuffmanCode( std::string file, std::string csv_file) 
 {
   std::vector<char> alphabas;
   std::vector<int> counts;
@@ -43,37 +43,115 @@ HuffmanCode::HuffmanCode( std::string file )
     }
   }
   infile.close();
-  this->printTable(alphabas, counts);
   this->initNodes(alphabas, counts);
+  // Get reverse list
+  std::vector<Node> nodes_r;
+  for (int i = this->nodes.size()-1; i >= 0; i--)
+  {
+    nodes_r.push_back(this->nodes[i]);
+  }
+  std::vector <double> pmf, cdf;
+  this->getPmfCdf(nodes_r, pmf, cdf);
+  this->printTable(nodes_r, pmf, cdf);
+  std::cout << "\nEntropy: " << this->getEntropy(pmf) << " bits/symbol" << std::endl;
+  this->writeToCsv(csv_file, nodes_r, pmf, cdf);
   this->buildTree();
 }
 
-void HuffmanCode::printTable(std::vector<char> alphabas, std::vector<int> counts)
+void HuffmanCode::getPmfCdf(std::vector<Node> node_list, 
+                            std::vector<double> &pmf, 
+                            std::vector<double> &cdf)
+{
+  for (int i = 0; i < node_list.size(); i++)
+  {
+    pmf.push_back(node_list[i].cnt / this->total_letters);
+    if (i == 0)
+    {
+      cdf.push_back(pmf[0]);
+    }
+    else
+    {
+      cdf.push_back(cdf[i-1]+pmf[i]);
+    }
+  }
+}
+
+ double HuffmanCode::getEntropy(std::vector<double> &pmf)
+ {
+  double entropy = 0;
+  for (int i = 0; i < pmf.size(); i++)
+  {
+    entropy += pmf[i] * log2(pmf[i]);
+  }
+  return -entropy;
+ }
+
+void HuffmanCode::printTable(std::vector<Node> node_list,
+                             std::vector<double> &pmf, 
+                             std::vector<double> &cdf)
 {
   std::cout << std::setw(15) << "Alphaba";
-  for (int i = 0; i < alphabas.size() / 2; i++)
+  for (int i = 0; i < node_list.size() / 2; i++)
   {
-    std::cout << std::setw(5) << this->getSymbol(alphabas[i]);
+    std::cout << std::setw(10) << node_list[i].letter;
   }
   std::cout << std::endl;
   std::cout << std::setw(15) << "Total Number";
-  for (int i = 0; i < alphabas.size() / 2; i++)
+  for (int i = 0; i < node_list.size() / 2; i++)
   {
-    std::cout << std::setw(5) << counts[i];
+    std::cout << std::setw(10) << node_list[i].cnt;
+  }
+  std::cout << std::endl;
+  std::cout << std::setw(15) << "PMF";
+  for (int i = 0; i < node_list.size() / 2; i++)
+  {
+    std::cout << std::setw(10) << std::setprecision (3)<< pmf[i];
+  }
+  std::cout << std::endl;
+  std::cout << std::setw(15) << "CDF";
+  for (int i = 0; i < node_list.size() / 2; i++)
+  {
+    std::cout << std::setw(10) << std::setprecision (3)<< cdf[i];
   }
   std::cout << std::endl << std::endl;;
   std::cout << std::setw(15) << "Alphaba";
-  for (int i = alphabas.size() / 2; i < alphabas.size(); i++)
+  for (int i = node_list.size() / 2; i < node_list.size(); i++)
   {
-    std::cout << std::setw(5) << this->getSymbol(alphabas[i]);
+    std::cout << std::setw(10) << node_list[i].letter;
   }
   std::cout << std::endl;
   std::cout << std::setw(15) << "Total Number";
-  for (int i = alphabas.size() / 2; i < alphabas.size(); i++)
+  for (int i = node_list.size() / 2; i < node_list.size(); i++)
   {
-    std::cout << std::setw(5) << counts[i];
+    std::cout << std::setw(10) << node_list[i].cnt;
   }
   std::cout << std::endl;
+  std::cout << std::setw(15) << "PMF";
+  for (int i = node_list.size() / 2; i < node_list.size(); i++)
+  {
+    std::cout << std::setw(10) << std::setprecision (3)<< pmf[i];
+  }
+  std::cout << std::endl;
+  std::cout << std::setw(15) << "CDF";
+  for (int i = node_list.size() / 2; i < node_list.size(); i++)
+  {
+    std::cout << std::setw(10) << std::setprecision (3)<< cdf[i];
+  }
+  std::cout << std::endl;
+}
+
+void HuffmanCode::writeToCsv( std::string file_path,
+                              std::vector<Node> node_list,
+                              std::vector<double> &pmf, 
+                              std::vector<double> &cdf)
+{
+  std::ofstream myfile(file_path);
+  myfile << "letter,pmf,cdf" << std::endl;
+  for (int i = 0; i < node_list.size(); i++)
+  {
+    myfile << node_list[i].letter << "," << pmf[i] << "," <<  cdf[i] << std::endl;
+  }
+  myfile.close();
 }
 
 std::string HuffmanCode::getSymbol(char c)
@@ -101,11 +179,14 @@ void HuffmanCode::initNodes(std::vector<char> alphabas, std::vector<int> counts)
     Node n(this->getSymbol(alphabas[i]), counts[i]);
     this->nodes.push_back(n);
   }
+  std::sort(this->nodes.begin(), this->nodes.end());
+  this->total_letters = 0;
+  for (auto& n : this->nodes)
+    this->total_letters += n.cnt;
 }
 
 void HuffmanCode::buildTree()
 {
-  std::sort(this->nodes.begin(), this->nodes.end());
   // for (std::vector<Node>::iterator it=this->nodes.begin(); it!=this->nodes.end(); ++it)
   //     std::cout << ' ' << it->letter << ":" << it->cnt;
   //   std::cout << '\n';
@@ -205,8 +286,8 @@ void HuffmanCode::printTree(Node *root, int spaces)
 
 int main(int argc, char const *argv[])
 {
-  // HuffmanCode huffman_code("../santaclaus.txt");
-  HuffmanCode huffman_code("../test.txt");
+  HuffmanCode huffman_code("../santaclaus.txt", "../statistic_result.csv");
+  // HuffmanCode huffman_code("../test.txt");
   std::cout << std::endl << "=================== Huffman Tree ================" << std::endl;
   // HuffmanCode huffman_code("./hw#1_entropy_huffman_golomb/test.txt");
   huffman_code.printTree(huffman_code.root, 1);
