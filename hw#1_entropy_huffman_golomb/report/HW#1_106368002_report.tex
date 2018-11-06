@@ -367,7 +367,15 @@ Figure~\ref{fig:empirical-distribution}
 \section*{Problem 4 Huffman Code Encode C++}
 Write a program that designs a Huffman code for the given distribution in Problem 3. (14%)
 \subsection*{Ans}
+The program for this problem was wrote together with Problem 3. The execute print the Huffman encode 
+result as Figure~\ref{fig:encode-result}
 
+\begin{figure}[h!]
+  \centering
+    \includegraphics[width=0.8\textwidth]{{"../result_img/encode_result"}.png}
+  \caption{Huffman encode result for \textbf{santaclaus.txt}}
+  \label{fig:encode-result}
+\end{figure}
 \newpage
 \section*{Problem 5 Adaptive Huffman Tree}
 Let X be a random variable with an alphabet $H$ , i.e., the 26 lower-case letters.
@@ -381,7 +389,137 @@ b: 00001 \\
 z: 11001 \\
 \textbf{Note}: Show the Huffman tree during your coding process.
 \subsection*{Ans}
+% \begin{multicols}{2}
+  \begin{enumerate}
+    \item Initial step: \\
+      $Total~nodes = 2m - 1 = 26\times 2 -1 = 51$  \\ \\
+      \begin{tikzpicture}
+        \tikzstyle{every node}=[circle,draw]
+        \node (Root)[rectangle, label={[blue]below:51}] {NYT};
+      \end{tikzpicture}
+    \item \textbf{a} encoded:
+      \begin{multicols}{2}
+        \begin{tikzpicture}
+          \tikzstyle{every node}=[circle, draw]
+          \node (Root)[label={[blue]above:51}] {1}
+          child{
+            node[rectangle, label={[red]left:NYT}, label={[blue]below:49}] {0}
+          }
+          child{
+            node[rectangle, label={[red]right:a}, label={[blue]below:50}] {1}
+          };
+        \end{tikzpicture}
+        
+        \null \vfill
+        \begin{tabular}{ cc } 
+          00000 &  \\
+          % \hline
+          a &  \\
+          \end{tabular}
 
+          \null \vfill
+      \end{multicols}
+    \item \textbf{a a} encoded:
+      \begin{multicols}{2}
+        \begin{tikzpicture}
+          \tikzstyle{every node}=[circle, draw]
+          \node (Root)[label={[blue]above:51}] {2}
+          child{
+            node[rectangle, label={[red]left:NYT}, label={[blue]below:49}] {0}
+          }
+          child{
+            node[rectangle, label={[red]right:a}, label={[blue]below:50}] {2}
+          };
+        \end{tikzpicture} \\
+        \null \vfill
+        \begin{tabular}{ cc } 
+          00000 & 1 \\
+          % \hline
+          a & a \\
+          \end{tabular} \\
+          \null \vfill
+      \end{multicols}
+    \newpage
+    \item \textbf{a a b} encoded: 
+      \begin{multicols}{2}
+        \begin{tikzpicture}
+          \tikzstyle{every node}=[circle, draw]
+          \node (Root)[label={[blue]above:51}] {3}
+          child{
+            node[label={[blue]above:49}] {1}
+            child{
+              node[rectangle, label={[red]left:NYT}, label={[blue]above:47}] {0}
+            }
+            child {
+              node[rectangle, label={[red]right:b}, label={[blue]above:48}] {1}
+            }
+          }
+          child{
+            node[rectangle, label={[red]right:a}, label={[blue]above:50}] {2}
+          };
+        \end{tikzpicture} \\
+        \null \vfill
+        \begin{tabular}{ cccc } 
+          00000 & 1 & 0 & 00001\\
+          % \hline
+          a & a & NYT & b\\
+          \end{tabular} \\
+          \null \vfill
+      \end{multicols}
+    \item \textbf{a a b b} encoded: 
+      \begin{multicols}{2}
+        \begin{tikzpicture}
+          \tikzstyle{every node}=[circle, draw]
+          \node (Root)[label={[blue]above:51}] {4}
+          child{
+            node[label={[blue]above:49}] {2}
+            child{
+              node[rectangle, label={[red]left:NYT}, label={[blue]above:47}] {0}
+            }
+            child {
+              node[rectangle, label={[red]right:b}, label={[blue]above:48}] {2}
+            }
+          }
+          child{
+            node[rectangle, label={[red]right:a}, label={[blue]above:50}] {2}
+          };
+        \end{tikzpicture} \\
+        \null \vfill
+        \begin{tabular}{ ccccc } 
+          00000 & 1 & 0 & 00001 & 01\\
+          % \hline
+          a & a & NYT & b & b\\
+          \end{tabular} \\
+          \null \vfill
+      \end{multicols}
+    \item \textbf{a a b b a} encoded:
+      \begin{multicols}{2}
+        \begin{tikzpicture}
+          \tikzstyle{every node}=[circle, draw]
+          \node (Root)[label={[blue]above:51}] {5}
+          child{
+            node[label={[blue]above:49}] {2}
+            child{
+              node[rectangle, label={[red]left:NYT}, label={[blue]above:47}] {0}
+            }
+            child {
+              node[rectangle, label={[red]right:b}, label={[blue]above:48}] {2}
+            }
+          }
+          child{
+            node[rectangle, label={[red]right:a}, label={[blue]above:50}] {3}
+          };
+        \end{tikzpicture} \\
+        \null \vfill
+        \begin{tabular}{ cccccc } 
+          00000 & 1 & 0 & 00001 & 01 & 1\\
+          % \hline
+          a & a & NYT & b & b & a\\
+          \end{tabular} \\
+          \null \vfill
+      \end{multicols}
+  \end{enumerate}
+% \end{multicols}
 \newpage
 \section*{Problem 6 Golomb Encoding and Decoding.}
 \begin{enumerate}[label=(\alph*)]
