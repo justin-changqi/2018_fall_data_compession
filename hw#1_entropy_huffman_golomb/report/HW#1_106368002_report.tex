@@ -19,6 +19,10 @@
     % For tree
     \usepackage{tikz}
 % \renewcommand{\theenumi}{(\alph*)}
+  \usepackage{mathtools}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \titlespacing*{\section}
   {0pt}{0.5\baselineskip}{1\baselineskip}
@@ -515,8 +519,8 @@ z: 11001 \\
           00000 & 1 & 0 & 00001 & 01 & 1\\
           % \hline
           a & a & NYT & b & b & a\\
-          \end{tabular} \\
-          \null \vfill
+        \end{tabular} \\
+        \null \vfill
       \end{multicols}
   \end{enumerate}
 % \end{multicols}
@@ -525,18 +529,51 @@ z: 11001 \\
 \begin{enumerate}[label=(\alph*)]
   \item Find the Golomb code of n=21 when m=4.
   \subsection*{Ans}
+    \begin{align*}
+      &2^{\ceil*{\log_2^{m}}}-m=2^{2}-4 = 0 \\
+      &encoded~21 = 21/4 = 5 \dots 1 = 111110~01 
+    \end{align*}
   \item Find the Golomb code of n=14 when m=4.
   \subsection*{Ans}
+  \begin{align*}
+    &2^{\ceil*{\log_2^{m}}}-m=2^{2}-4 = 0 \\
+    &encoded~14 = 14/4 = 3 \dots 2 = 1110~10 
+  \end{align*}
   \item Find the Golomb code of n=21 when m=5.
   \subsection*{Ans}
+    \begin{align*}
+      &2^{\ceil*{\log_2^{m}}}-m=2^{3}-5 = 3 \\
+      &encoded~21 = 21/5 = 2 \dots 1 = 110~01 
+    \end{align*}
   \item Find the Golomb code of n=14 when m=5.
   \subsection*{Ans}
+    \begin{align*}
+      &2^{\ceil*{\log_2^{m}}}-m=2^{3}-5 = 3 \\
+      &encoded~14 = 14/5 = 2 \dots 4 = 110~111 
+    \end{align*}
   \item A two-integer sequence is encoded by Golomb code with m=4 to get the bitstream
   11101111000. What’s the decoded two-integer sequence?
   \subsection*{Ans}
+    \begin{align*}
+      &2^{\ceil*{\log_2^{m}}}-m=2^{2}-4 = 0 \\
+      &\begin{tabular}{ cccc } 
+        \underline{1110} & \underline{11} & \underline{110} & \underline{00} \\
+        3                & 3              & 2               & 0 \\
+      \multicolumn{2}{c}{15} & \multicolumn{2}{c}{8}
+      \end{tabular} \\
+    \end{align*}
+  \newpage
   \item A two-integer sequence is encoded by Golomb code with m=5 to get the bitstream
   11101111000 (the same bitstream as that in (e)). What’s the decoded two-integer sequence?\\
   \textbf{Hint}: The unary code for a positive integer q is simply q 1s followed by a 0.
   \subsection*{Ans}
+  \begin{align*}
+    &2^{\ceil*{\log_2^{m}}}-m=2^{3}-4 = 4 \\
+    &\begin{tabular}{ cccc } 
+     \underline{1110} & \underline{11} & \underline{110} & \underline{00} \\
+     3                & 3              & 2               & 0 \\
+    \multicolumn{2}{c}{18} & \multicolumn{2}{c}{10}
+    \end{tabular} \\
+  \end{align*}
 \end{enumerate}
 \end{document}
