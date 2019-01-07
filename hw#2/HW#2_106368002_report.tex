@@ -1,0 +1,143 @@
+\documentclass[a4paper, 11pt]{article}
+    \usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+    \usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
+    \usepackage{fullpage} % changes the margin
+    \usepackage{CJKutf8}
+    \usepackage{enumitem}
+    \usepackage{titlesec}
+    \usepackage{graphicx}     % for figure
+    \usepackage{subcaption}   % for figure
+    \usepackage[export]{adjustbox}
+    \usepackage[most]{tcolorbox}
+    \usepackage{xcolor}
+    \usepackage{multicol}
+    \usepackage{array}
+    \usepackage{wrapfig}
+    \usepackage{multirow}
+    \usepackage{tabu}
+    \usepackage{hyperref}
+% \renewcommand{\theenumi}{(\alph*)}
+  \usepackage{mathtools}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\titlespacing*{\section}
+  {0pt}{0.5\baselineskip}{1\baselineskip}
+
+\titlespacing*{\subsection}
+  {0pt}{0.1\baselineskip}{0.1\baselineskip}
+
+\begin{document}
+%Header-Make sure you update this information!!!!
+\noindent
+\begin{center}
+  \large\textbf{2018 Fall Data Compression Homework \#2} \\
+\end{center}
+\begin{CJK}{UTF8}{bsmi}
+\normalsize EE 248583 \hfill \textbf{106368002 張昌祺 Justin, Chang-Qi Zhang} \\
+Advisor: 電子所 高立人 副教授 \hfill justin840727@gmail.com \\
+\null\hfill Date: \today \\
+\end{CJK}
+
+\section*{Problem 1}
+Let X be a discrete random variable that represents the score of students in the course
+“Data Compression”. The distribution of X is given below. Suppose we are using the
+Lloyd-Max algorithm, i.e., Nearest Neighbor Condition and Centroid Condition, to find a
+4-point scalar quantizer of X. That is, we are trying to find out the four quantization
+regions, $R_{1}[x_0, x_1),~R_{2}[x_1, x_2),\\~R_{3}[x_2, x_3)~R_{4}[x_3, x_4)$ as well as the 
+reconstructed value $y_1,~y_2,~y_3,~y_4$ corresponding to the four quantization regions. 
+The initial codebook $C^0$ is given by $C^0=\{50,~60,~70,~80\}$.
+
+\begin{center}
+  \begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c|c|c|c|c| }
+  \hline
+   X     & 30 & 45 & 50 & 55 & 60 & 65 & 70 & 75 & 80 & 85 & 90 & 95 & 100 & ow. \\
+   \hline 
+   Count & 2  & 4  & 4  & 4  & 6  & 8  & 12 & 13 & 10 & 9  & 5  & 2  & 1   & 0 \\
+   \hline
+  \end{tabular}
+  \end{center}
+  Note: During the scalar quantization process, each quantization region does not contain the
+  right bound of the region, (i.e., the right bound or upper bound of a quantization bin
+  is an open interval) except the rightmost overload region.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Determine the four quantization regions,$R_{1},~R_{2},~R_{3}~R_{4}$ after 
+  the first iteration, i.e., what’s the value of $x_{1},~x_{2},~x_{3}~x_{4}$ after the 
+  first iteration?
+    \subsection*{Ans}
+    
+  \item Determine the codebook C 1 after the first iteration, i.e., what’s the value of the
+  four reconstructed values, $y_{1},~y_{2},~y_{3}~y_{4}$ after the first iteration?
+    \subsection*{Ans}
+
+  \item Determine the four quantization regions,$R_{1},~R_{2},~R_{3}~R_{4}$ after 
+  the first iteration, i.e., what’s the value of $x_{1},~x_{2},~x_{3}~x_{4}$ after the 
+  second iteration?
+    \subsection*{Ans}
+  
+  \item Determine the codebook C 1 after the first iteration, i.e., what’s the value of the
+  four reconstructed values, $y_{1},~y_{2},~y_{3}~y_{4}$ after the second iteration?
+    \subsection*{Ans}
+
+\end{enumerate}
+\newpage
+\section*{Problem 2}
+Given an 8-bit gray scale image with dimension 512 x 512. Suppose we are using Vector
+Quantization for the compression of the image with block size 8x8 (i.e., codeword
+dimension is 8x8), and the codebook size 64. During the coding procedure, the image
+width and image height are encoded each with 2 bytes and then transmitted as an
+overhead so that the decoder can reconstruct the image correctly. Moreover, we
+assume that the decoder also has the same codebook as encoder, so that the codebook does
+not have to be transmitted to the decoder.
+Please determine the number of bits that should be transmitted if fixed length code is used
+for the encoding of the codeword index. (17\%)
+\subsection*{Ans}
+
+\section*{Problem 3}
+For the probability model in Table1 below, find the real valued tag for the sequence 
+$a_1~a_1~a_3~a_2~a_3~\\a_1$, (25\%)
+\begin{center}
+  \begin{tabular}{ |c|c| }
+  \hline
+   \textbf{Letter} & \textbf{probability}\\
+   \hline 
+   $a_1$ & 0.2  \\
+   \hline
+   $a_2$ & 0.3  \\
+   \hline
+   $a_3$ & 0.5  \\
+   \hline
+  \end{tabular}
+  \end{center}
+\subsection*{Ans}
+
+\section*{Problem 4}
+Given the frequency counts shown in Table2 \\
+\begin{center}
+  \begin{tabular}{ |c|c| }
+  \hline
+   \textbf{Letter} & \textbf{probability}\\
+   \hline 
+   $a$ & 2  \\
+   \hline
+   $b$ & 3  \\
+   \hline
+   $c$ & 5  \\
+   \hline
+  \end{tabular}
+  \end{center}
+Hint: You can send the lower bound of the last symbol for the termination of the encoding
+process.
+
+\begin{enumerate}[label=(\alph*)]
+  \item What is the word length m required for unambiguous integer encoding?
+  \subsection*{Ans}
+  \item Use integer implementation to find the binary code for the sequence a a c b c a.
+  \subsection*{Ans}
+  \item Has E 3 mapping ever been used for this source? Justify your answer.
+  \subsection*{Ans}
+\end{enumerate}
+
+\end{document}
