@@ -1,6 +1,7 @@
 // Copyright 2019 Justin Zhang
 #include <chrono>
 #include "pcl_octree.hpp"
+#include <pcl/registration/icp.h>
 
 typedef std::chrono::milliseconds TimeUnit;
 
@@ -25,6 +26,8 @@ pcl::PointCloud<PointOct>::Ptr PclOctree::decodeCloud() {
   return cloud_out;
 }
 
+
+
 main(int argc, char **argv) {
   pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_i(
                  new pcl::PointCloud<pcl::PointXYZI>);
@@ -34,6 +37,9 @@ main(int argc, char **argv) {
     return (-1);
   }
   pcl::copyPointCloud(*cloud_i, *cloud);
+  pcl::IterativeClosestPoint<pcl::PointXYZ,pcl::PointXYZ> icp;
+  icp.setInputSource(cloud);
+
   pcl::io::savePCDFileASCII("../pcd/cloud_src.pcd", *cloud);
   PclOctree pcl_octree_low(cloud,
                           pcl::io::LOW_RES_OFFLINE_COMPRESSION_WITHOUT_COLOR);
@@ -72,6 +78,9 @@ main(int argc, char **argv) {
                 std::chrono::system_clock::now().time_since_epoch());
   std::cout << "Decode Time: " << (ms_b - ms_a).count() << " ms" << std::endl;
   pcl::io::savePCDFileASCII("../pcd/low_decode_cloud.pcd", *decoded_pc);
+  icp.setInputTarget(decoded_pc);
+  icp.initCompute();
+  std::cout << "Error: " << icp.getFitnessScore() << std::endl;
 
   std::cout << "\n********** Decode Mid Res PointCloud **********" << std::endl;
   ms_a = std::chrono::duration_cast<TimeUnit>(
@@ -81,6 +90,9 @@ main(int argc, char **argv) {
                 std::chrono::system_clock::now().time_since_epoch());
   std::cout << "Decode Time: " << (ms_b - ms_a).count() << " ms" << std::endl;
   pcl::io::savePCDFileASCII("../pcd/mid_decode_cloud.pcd", *decoded_pc);
+  icp.setInputTarget(decoded_pc);
+  icp.initCompute();
+  std::cout << "Error: " << icp.getFitnessScore() << std::endl;
 
   std::cout << "\n********** Decode High Res PointCloud **********" << std::endl;
   ms_a = std::chrono::duration_cast<TimeUnit>(
@@ -90,5 +102,8 @@ main(int argc, char **argv) {
                 std::chrono::system_clock::now().time_since_epoch());
   std::cout << "Decode Time: " << (ms_b - ms_a).count() << " ms" << std::endl;
   pcl::io::savePCDFileASCII("../pcd/high_decode_cloud.pcd", *decoded_pc);
+  icp.setInputTarget(decoded_pc);
+  icp.initCompute();
+  std::cout << "Error: " << icp.getFitnessScore() << std::endl;
   return (0);
 }
